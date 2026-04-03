@@ -6,9 +6,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Specific restricted credentials for Admin Portal
-    $allowed_email = 'agricart@gmail.com';
-    $allowed_password = '1234567890';
+    // Specific restricted credentials for Admin Portal (Using Env Vars for Vercel)
+    $allowed_email = getenv('ADMIN_EMAIL') ?: 'agricart@gmail.com';
+    $allowed_password = getenv('ADMIN_PASS') ?: '1234567890';
 
     if ($email === $allowed_email && $password === $allowed_password) {
         // Clear any existing session to ensure a fresh starts
