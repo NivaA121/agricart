@@ -1,7 +1,7 @@
 <?php
 
 // Database connection configuration for Agricart
-// Use environment variables (Vercel) or Supabase defaults for local development
+// Use environment variables (Render/Vercel) or Supabase defaults for local development
 
 $db_host = getenv('DB_HOST') ?: 'db.xvkjvismjdjtiwtypfff.supabase.co';
 $db_port = getenv('DB_PORT') ?: '5432';
@@ -9,6 +9,15 @@ $db_name = getenv('DB_NAME') ?: 'postgres';
 $db_user = getenv('DB_USER') ?: 'postgres';
 $db_pass = getenv('DB_PASS') ?: 'Q7KnsSrYSAvKEcPC';
 $db_type = getenv('DB_TYPE') ?: 'pgsql'; // Default to pgsql for Supabase
+
+// Force IPv4 resolution for Supabase hostnames
+// Render's free tier doesn't support IPv6 outbound connections,
+// and Supabase hostnames can resolve to IPv6 which causes "Network is unreachable"
+$resolved_host = gethostbyname($db_host);
+if ($resolved_host !== $db_host) {
+    // Successfully resolved to IPv4 address
+    $db_host = $resolved_host;
+}
 
 // Try connecting using a full DATABASE_URL (for cloud deployment)
 $database_url = getenv('DATABASE_URL');
